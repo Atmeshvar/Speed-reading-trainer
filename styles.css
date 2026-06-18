@@ -1,0 +1,353 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.language-switcher {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.lang-btn {
+    background: white;
+    color: #333;
+    border: 2px solid #667eea;
+    border-radius: 999px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.lang-btn:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+}
+
+.container {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    max-width: 800px;
+    width: 100%;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 28px;
+}
+
+.controls {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.control-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.control-group:last-child {
+    margin-bottom: 0;
+}
+
+label {
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+input[type="file"],
+input[type="number"] {
+    padding: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+input[type="file"]:focus,
+input[type="number"]:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+input[type="range"] {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: #e0e0e0;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #667eea;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    background: #5568d3;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #667eea;
+    cursor: pointer;
+    border: none;
+    transition: background 0.3s;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+    background: #5568d3;
+}
+
+input[type="number"] {
+    max-width: 150px;
+}
+
+small {
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+button {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#startBtn {
+    background: #667eea;
+    color: white;
+}
+
+#startBtn:hover:not(:disabled) {
+    background: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+#startBtn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+#stopBtn {
+    background: #e74c3c;
+    color: white;
+}
+
+#stopBtn:hover:not(:disabled) {
+    background: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+}
+
+#stopBtn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.display-area {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 40px 40px 20px;
+    text-align: center;
+    min-height: 360px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.display-inner {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    min-height: 220px;
+    padding-top: 10px;
+}
+
+.text-display {
+    font-size: 24px;
+    color: #333;
+    font-weight: 500;
+    line-height: 1.4;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transform: scale(0.6);
+    max-width: 100%;
+    word-break: break-word;
+}
+
+.text-display.showing {
+    animation: textGrow 0.3s ease-in forwards;
+}
+
+.text-display.hold {
+    animation: none;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.text-display.hide {
+    animation: textHide 0.2s ease-out forwards;
+}
+
+@keyframes textGrow {
+    from {
+        transform: scale(0.6);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes textHide {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.status {
+    margin-top: 40px;
+    color: #999;
+    font-size: 14px;
+}
+
+#statusText {
+    color: #667eea;
+    font-weight: 500;
+}
+
+.pwa-status {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+#connectionStatus {
+    color: #333;
+    font-weight: 600;
+    background: #eef2ff;
+    border: 1px solid #dbe4ff;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 13px;
+}
+
+#connectionStatus.offline {
+    background: #ffe6e6;
+    border-color: #ffcccc;
+    color: #c0392b;
+}
+
+.install-btn {
+    background: #10b981;
+    color: white;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.install-btn:hover {
+    background: #059669;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .display-area {
+        padding: 30px 20px;
+        min-height: 250px;
+    }
+
+    .display-inner {
+        min-height: 180px;
+    }
+
+    .text-display {
+        font-size: 18px;
+    }
+
+    @keyframes textGrow {
+        from {
+            transform: scale(0.6);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+}
+
