@@ -12,6 +12,8 @@ const translations = {
         speedHint: 'Чим менше — тим швидше зʼявляється наступний рядок',
         holdTimeLabel: 'Час на максимальному розмірі (мс):',
         holdTimeHint: 'Рядок затримується перед тим, як зникнути',
+        growTimeLabel: 'Час збільшення рядка (мс):',
+        growTimeHint: 'Як довго рядок збільшується до максимального розміру',
         fontSizeLabel: 'Максимальний розмір шрифту (px):',
         fontSizeHint: 'Встановіть максимальний розмір тексту на паузі',
         offsetLabel: 'Позиція WPM (px):',
@@ -52,6 +54,8 @@ const translations = {
         speedHint: 'The lower the value, the faster the next line appears',
         holdTimeLabel: 'Time at maximum size (ms):',
         holdTimeHint: 'The line stays visible before disappearing',
+        growTimeLabel: 'Line growth time (ms):',
+        growTimeHint: 'How long the line takes to grow to maximum size',
         fontSizeLabel: 'Maximum font size (px):',
         fontSizeHint: 'Set the maximum text size on pause',
         offsetLabel: 'WPM position (px):',
@@ -169,6 +173,7 @@ const loadPasteBtn = document.getElementById('loadPasteBtn');
 const wordsPerLineInput = document.getElementById('wordsPerLine');
 const speedInput = document.getElementById('speed');
 const holdTimeInput = document.getElementById('holdTime');
+const growTimeInput = document.getElementById('growTime');
 const maxFontSizeInput = document.getElementById('maxFontSize');
 const statusOffsetInput = document.getElementById('statusOffset');
 const statusOffsetValue = document.getElementById('statusOffsetValue');
@@ -402,6 +407,7 @@ function saveReadingState() {
         wordsPerLine: parseInt(wordsPerLineInput.value),
         speed: parseInt(speedInput.value),
         holdTime: parseInt(holdTimeInput.value),
+        growTime: parseInt(growTimeInput.value),
         maxFontSize: parseInt(maxFontSizeInput.value),
         statusOffset: parseInt(statusOffsetInput.value),
         timestamp: Date.now(),
@@ -522,7 +528,11 @@ function showNextLine() {
     const line = allLines[currentLineIndex];
     const speed = parseInt(speedInput.value);
     const holdTime = parseInt(holdTimeInput.value);
+    const growTime = parseInt(growTimeInput.value);
     const maxFontSize = parseInt(maxFontSizeInput.value);
+
+    // Apply growTime as CSS variable
+    document.documentElement.style.setProperty('--grow-time', `${growTime}ms`);
 
     textDisplay.textContent = line;
     textDisplay.style.fontSize = `${Math.max(20, maxFontSize)}px`;
@@ -539,11 +549,11 @@ function showNextLine() {
             saveReadingState();
             showNextLine();
         }, speed);
-    }, 300 + holdTime);
+    }, growTime + holdTime);
 
     const progress = Math.round(((currentLineIndex + 1) / allLines.length) * 100);
     const lineWords = line.split(/\s+/).filter(Boolean).length;
-    const totalTimeSeconds = (300 + holdTime + speed) / 1000;
+    const totalTimeSeconds = (growTime + holdTime + speed) / 1000;
     const wpm = Math.round((lineWords / totalTimeSeconds) * 60);
 
     statusText.textContent = t('progressText', currentLineIndex + 1, allLines.length, progress);
@@ -587,6 +597,9 @@ function loadLastBook() {
     }
     if (typeof savedState.holdTime === 'number') {
         holdTimeInput.value = savedState.holdTime;
+    }
+    if (typeof savedState.growTime === 'number') {
+        growTimeInput.value = savedState.growTime;
     }
     if (typeof savedState.maxFontSize === 'number') {
         maxFontSizeInput.value = savedState.maxFontSize;

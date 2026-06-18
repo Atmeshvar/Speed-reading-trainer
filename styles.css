@@ -230,7 +230,7 @@ button {
 }
 
 .text-display.showing {
-    animation: textGrow 0.3s ease-in forwards;
+    animation: textGrow var(--grow-time, 0.3s) ease-in forwards;
 }
 
 .text-display.hold {
